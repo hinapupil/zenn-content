@@ -12,7 +12,7 @@ published: true
 
 ## この記事で解決すること
 
-Claude Code にはスマホから操作できる公式の **Remote Control** 機能があります。Remote Control には主に 3 つの始め方があります。
+Claude Code にはスマホから操作できる公式の **Remote Control** 機能がある。Remote Control には主に3つの始め方がある。
 
 | モード | 複数セッション | ローカル対話 | 既存セッション引き継ぎ |
 |---|---|---|---|
@@ -20,11 +20,11 @@ Claude Code にはスマホから操作できる公式の **Remote Control** 機
 | セッション内の `/remote-control` | 1 プロセスにつき 1 セッション | 可能 | 可能 |
 | `claude remote-control`（Server Mode） | 複数可（デフォルト capacity 32） | 不可（サーバー専用） | 不可 |
 
-Remote Control は「1 つの実行中セッションを別デバイスから継続する」用途には強い一方、**ローカルの 1 画面で複数のバックグラウンドセッションを一覧管理し、必要に応じて attach / detach する**用途は **Agent View (`claude agents`)** の方が合っています。
+Remote Control は「1つの実行中セッションを別デバイスから継続する」用途には強い一方、**ローカルの1画面で複数のバックグラウンドセッションを一覧管理し、必要に応じて attach / detach する**用途は **Agent View (`claude agents`)** の方が合っている。
 
-Agent View なら **ローカル対話と複数セッション管理を両立** できます。Mac で普通に Claude Code を使い、`←` キーひとつでセッションをバックグラウンドに移して一覧管理。iPhone からも同じ Agent View に SSH で入れます。
+Agent View なら **ローカル対話と複数セッション管理を両立** できる。Mac で普通に Claude Code を使い、`←` キーひとつでセッションをバックグラウンドに移して一覧管理。iPhone からも同じ Agent View に SSH で入れる。
 
-この記事では、**Tailscale + Termius で iPhone から Mac に SSH 接続し、Agent View で複数セッションを管理する構成** を紹介します。
+この記事では **Tailscale + Termius で iPhone から Mac に SSH 接続し、Agent View で複数セッションを管理する構成** を紹介する。
 
 ### Remote Control と Agent View の比較
 
@@ -36,7 +36,7 @@ Agent View なら **ローカル対話と複数セッション管理を両立** 
 | 認証方式 | OAuth 必須 | 制限なし |
 
 :::message
-この記事は Claude Code **v2.1.153** 時点の情報です。`claude agents` は v2.1.139 以降で利用可能です。
+この記事は Claude Code **v2.1.153** 時点の情報。`claude agents` は v2.1.139 以降で利用可能。
 :::
 
 ## 構成の全体像
@@ -53,7 +53,7 @@ Mac (claude agents)
     └── Session C: テスト追加 [completed]
 ```
 
-必要なのは 3 つだけです。
+必要なのは3つだけ。
 
 | コンポーネント | 役割 | 費用 |
 |---|---|---|
@@ -67,9 +67,9 @@ Mac (claude agents)
 
 #### 1. Tailscale のインストール
 
-Mac App Store から [Tailscale](https://apps.apple.com/app/tailscale/id1475387142) をインストールしてログインします。
+Mac App Store から [Tailscale](https://apps.apple.com/app/tailscale/id1475387142) をインストールしてログイン。
 
-App Store 版は CLI が PATH に入りません。必要に応じて wrapper を作成します。
+App Store 版は CLI が PATH に入らない。必要に応じて wrapper を作成する。
 
 ```bash
 mkdir -p ~/bin
@@ -80,29 +80,29 @@ SCRIPT
 chmod +x ~/bin/tailscale
 ```
 
-`~/bin` が PATH に入っていれば `tailscale status` で動作確認できます。
+`~/bin` が PATH に入っていれば `tailscale status` で動作確認できる。
 
 #### 2. SSH の有効化
 
-**システム設定 → 一般 → 共有 → リモートログイン** を ON にします。
+**システム設定 → 一般 → 共有 → リモートログイン** を ON にする。
 
-SSH 鍵認証の設定は iPhone 側のセットアップ後に行います（iPhone で鍵を作成し、その公開鍵を Mac に登録する流れです）。
+SSH 鍵認証の設定は iPhone 側のセットアップ後に行う（iPhone で鍵を作成し、その公開鍵を Mac に登録する流れ）。
 
-Tailscale IP はメニューバーの Tailscale アイコン、または `tailscale ip` で確認できます。
+Tailscale IP はメニューバーの Tailscale アイコン、または `tailscale ip` で確認できる。
 
 ### iPhone 側
 
 #### 1. Tailscale
 
-App Store から **Tailscale** をインストールし、Mac と同じアカウントでログインします。両デバイスが「Connected」になれば OK です。
+App Store から **Tailscale** をインストールし、Mac と同じアカウントでログイン。両デバイスが「Connected」になれば OK。
 
 #### 2. Termius
 
-App Store から **Termius** をインストールします（無料版で十分です。Pro への課金は Skip）。
+App Store から **Termius** をインストール（無料版で十分。Pro への課金は Skip）。
 
 #### 3. SSH 鍵の作成
 
-パスワード認証でも接続は可能ですが、セキュリティを考慮すると鍵認証が望ましいです。
+パスワード認証でも接続は可能だが、セキュリティを考慮すると鍵認証が望ましい。
 
 Termius で鍵を作成する手順:
 
@@ -111,7 +111,7 @@ Termius で鍵を作成する手順:
 3. 鍵名を設定して保存（例: `mac-remote`）
 4. 作成した鍵の公開鍵をコピー
 
-コピーした公開鍵を Mac の `authorized_keys` に追加します。
+コピーした公開鍵を Mac の `authorized_keys` に追加する。
 
 ```bash
 # Mac 側で実行
@@ -121,31 +121,31 @@ printf '%s\n' 'ssh-ed25519 AAAA... termius-iphone' >> ~/.ssh/authorized_keys
 chmod 600 ~/.ssh/authorized_keys
 ```
 
-（`ssh-ed25519 AAAA...` の部分は Termius で生成した公開鍵に置き換えてください）
+（`ssh-ed25519 AAAA...` の部分は Termius で生成した公開鍵に置き換える）
 
 #### 4. ホストの追加
 
-Termius でホストを追加します。
+Termius でホストを追加する。
 
 - **Hostname**: Mac の Tailscale IP（`100.x.x.x`）
 - **Username**: Mac のユーザー名
 - **SSH ID, Key, Certificate, FIDO2**: 作成した鍵を選択
 
-ホストをタップして接続し、シェルのプロンプトが表示されれば成功です。
+ホストをタップして接続し、シェルのプロンプトが表示されれば成功。
 
 ## 使い方
 
 ### Agent View を起動する
 
-iPhone の Termius から SSH 接続したら、以下を実行します。
+iPhone の Termius から SSH 接続したら、以下を実行する。
 
 ```bash
 claude agents
 ```
 
-初回起動時はバックグラウンドセッションが空のため、下部の入力欄のみ表示されます。まずは Mac 側で `/bg` を使って既存セッションを移すか、入力欄からタスクを dispatch してみてください。
+初回起動時はバックグラウンドセッションが空のため、下部の入力欄のみ表示される。Mac 側で `/bg` を使って既存セッションを移すか、入力欄からタスクを dispatch する。
 
-セッションがある状態では、以下のような一覧が表示されます。
+セッションがある状態では、以下のような一覧が表示される。
 
 ```
 Claude Code v2.1.153
@@ -168,14 +168,14 @@ Sonnet 4.6 · /Users/you
 | `Space` | セッションの出力を確認する（peek） |
 
 :::message alert
-下部の入力欄は **新規セッションの dispatch 用** です。既存セッションに返信したい場合は、そのセッションを選んで `Enter`（attach）または `Space`（peek）から操作してください。
+下部の入力欄は **新規セッションの dispatch 用**。既存セッションに返信したい場合は、そのセッションを選んで `Enter`（attach）または `Space`（peek）から操作する。
 :::
 
 ### Mac の既存セッションを Agent View に移す
 
-Mac のターミナルで既に Claude Code を動かしている場合、空のプロンプトで `←` キーを押すとバックグラウンドに移行します。`/bg` コマンドでも同じです。
+Mac のターミナルで既に Claude Code を動かしている場合、空のプロンプトで `←` キーを押すとバックグラウンドに移行する。`/bg` コマンドでも同じ。
 
-バックグラウンドに移ったセッションは Agent View に表示され、iPhone から操作できるようになります。
+バックグラウンドに移ったセッションは Agent View に表示され、iPhone から操作できるようになる。
 
 ### 典型的なワークフロー
 
@@ -184,19 +184,19 @@ Mac のターミナルで既に Claude Code を動かしている場合、空の
 3. **iPhone から `claude agents`** — 進捗確認、追加タスク dispatch
 4. **Mac に戻ったら `claude agents`** — セッションを選んで attach、作業再開
 
-Mac と iPhone のどちらから `claude agents` を開いても、同じセッション一覧が見えます。
+Mac と iPhone のどちらから `claude agents` を開いても、同じセッション一覧が見える。
 
 ## 注意点
 
 ### SSH 切断時の挙動
 
-Agent View を表示していた SSH セッションが切断されても、バックグラウンドで動作中の Claude セッションには影響しません。再接続後に `claude agents` を実行すれば、同じセッション一覧が表示されます。
+Agent View を表示していた SSH セッションが切断されても、バックグラウンドで動作中の Claude セッションには影響しない。再接続後に `claude agents` を実行すれば、同じセッション一覧が表示される。
 
 ### セキュリティ
 
-この構成は個人の開発環境を想定しています。業務利用の場合は、所属組織のセキュリティポリシーを確認してください。
+この構成は個人の開発環境を想定している。業務利用の場合は所属組織のセキュリティポリシーを確認すること。
 
-最低限、以下は対応しておくことをおすすめします。
+最低限、以下は対応しておいた方がいい。
 
 - **SSH 鍵認証を使う**（パスワード認証よりも安全）
 - **SSH 鍵にパスフレーズを設定する**（iPhone 紛失時の防御）
@@ -206,7 +206,7 @@ Agent View を表示していた SSH セッションが切断されても、バ�
 
 ### 利用枠の消費
 
-Agent View から複数セッションを並列で動かすと、各セッションがそれぞれ利用枠を消費します。同時に走らせるセッション数は意識しておきましょう。
+Agent View から複数セッションを並列で動かすと、各セッションがそれぞれ利用枠を消費する。同時に走らせるセッション数は意識しておくこと。
 
 ## トラブルシューティング
 
@@ -220,7 +220,7 @@ Agent View から複数セッションを並列で動かすと、各セッショ
 
 ## まとめ
 
-Remote Control は手軽ですが、ローカル対話と複数セッション管理を両立するなら Agent View が向いています。Tailscale + Termius で SSH 接続を確保すれば、iPhone からも `claude agents` と打つだけです。初回セットアップは 15 分程度で済みます。
+Remote Control は手軽だが、ローカル対話と複数セッション管理を両立するなら Agent View が向いている。Tailscale + Termius で SSH 接続を確保すれば、iPhone からも `claude agents` と打つだけ。初回セットアップは15分程度で済む。
 
 ## 関連リソース
 
