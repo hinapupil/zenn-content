@@ -28,8 +28,15 @@ Claude Code に「推測で断言しない」と書いた。CLAUDE.md の三行�
 
 4ヶ月で failure-log は30件を超えて、そのうち15件が CLAUDE.md のルールになっている。shell の heredoc で特殊文字のエスケープが3回壊れたので Write ツールで書けというルールができ、bot レビューの「スコープ外」を鵜呑みにして2回指摘されたので自分でコスト比較しろというルールができた。
 
-```
-失敗 → failure-log に記録 → 再発したら CLAUDE.md に昇格 → 重要なら hook に移行
+```mermaid
+flowchart LR
+    A[失敗] --> B[failure-log に記録]
+    B --> C{再発 3回以上?}
+    C -->|Yes| D[CLAUDE.md に昇格]
+    C -->|No| E[記録のみ]
+    D --> F{忘れられる?}
+    F -->|Yes| G[hook に移行]
+    F -->|No| H[CLAUDE.md で運用]
 ```
 
 反省文を書いているのではなくて、CLAUDE.md を物理的に書き換えている。
@@ -42,11 +49,12 @@ failure-log を運用していて最も効果があったのは、ルールを C
 
 Claude Code はユーザーに質問を投げるとき、調査もせずに選択肢を並べることがあって、「A と B のどちらがいいですか？」と推奨も根拠もなく聞いてくる。CLAUDE.md に「質問する前に調査し、推奨を添えること」と書いたのだが、最初は守られて1週間で忘れた。そこで `ask-question-gate.sh` という PreToolUse hook を作った。
 
-```
-AskUserQuestion 発火
-  → ask-question-gate.sh
-  → 入力に「推奨」がない → exit 2（ブロック + チェックリスト注入）
-  → ある → exit 0（通過）
+```mermaid
+flowchart TD
+    A[AskUserQuestion 発火] --> B[ask-question-gate.sh]
+    B --> C{入力に「推奨」がある?}
+    C -->|No| D["exit 2（ブロック + チェックリスト注入）"]
+    C -->|Yes| E["exit 0（通過）"]
 ```
 
 単純な文字列マッチなのだが、これで質問の質が劇的に変わった。hook は bypass できない。
@@ -55,11 +63,12 @@ AskUserQuestion 発火
 
 16GB RAM の MacBook で開発していて（個人開発なのでこれが精一杯だ）、`pnpm install` とか `tsc` とか `jest` とかの重いコマンドを並列で走らせると swap が飽和する。実際に一度、3つの worktree で3つのエージェントを並列で動かしたら 68GB の swap を食って PC が強制再起動になったので、それ以来 Agent の PreToolUse hook で `vm_stat` を叩いて空きメモリが 2GB を切ったらエージェントの起動をブロックするようにしている。
 
-```
-Agent 起動（PreToolUse）
-  → vm_stat で空きメモリ取得
-  → 2GB 未満 → exit 2（ブロック）
-  → 2GB 以上 → exit 0（通過）
+```mermaid
+flowchart TD
+    A[Agent 起動 / PreToolUse] --> B[vm_stat で空きメモリ取得]
+    B --> C{2GB 以上?}
+    C -->|No| D["exit 2（ブロック）"]
+    C -->|Yes| E["exit 0（通過）"]
 ```
 
 ハードウェアの物理制約を harness に埋め込んだ形だ。
