@@ -1,5 +1,5 @@
 ---
-title: "（仮）"
+title: "CLAUDE.md のルールは忘れられるようにできている"
 emoji: "🔧"
 type: "tech"
 topics: ["claudecode", "harnessengineering", "ai", "開発環境"]
